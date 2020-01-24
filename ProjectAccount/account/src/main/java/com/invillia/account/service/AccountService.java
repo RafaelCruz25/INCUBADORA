@@ -1,17 +1,16 @@
 package com.invillia.account.service;
 
 import com.invillia.account.entity.request.AccountRequest;
-import com.invillia.account.entity.request.DepositRequest;
-import com.invillia.account.entity.request.WithdrawRequest;
+import com.invillia.account.entity.request.BankRequest;
 import com.invillia.account.entity.response.AccountResponse;
 
 import java.util.List;
 
 public interface AccountService {
 
-  AccountResponse withdraw(WithdrawRequest withdrawRequest);
+  AccountResponse withdraw(final Long id, final BankRequest bankRequest);
 
-  AccountResponse deposit(DepositRequest depositRequest);
+  AccountResponse deposit(final Long id, BankRequest bankRequest);
 
   List<AccountResponse> findAll(final AccountRequest accountRequest);
 

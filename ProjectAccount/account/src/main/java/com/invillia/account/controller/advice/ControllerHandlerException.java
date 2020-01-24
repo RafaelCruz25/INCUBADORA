@@ -1,6 +1,7 @@
 package com.invillia.account.controller.advice;
 
 import com.invillia.account.exceptions.AccountNotFoundException;
+import com.invillia.account.exceptions.AccountTypeNotFoundException;
 import com.invillia.account.exceptions.CpfNotValidException;
 import com.invillia.account.exceptions.PersonNotFoundException;
 import com.invillia.account.exceptions.UnavailableValueException;
@@ -79,6 +80,20 @@ public class ControllerHandlerException {
             formatter.format(System.currentTimeMillis()),
             status.value(),
             "Valor inválido",
+            e.getMessage(),
+            request.getRequestURI()
+    );
+    return ResponseEntity.status(status).body(error);
+  }
+
+  @ExceptionHandler(AccountTypeNotFoundException.class)
+  public HttpEntity<StandardError> accountTypeNotFoundException(final AccountTypeNotFoundException e,
+                                                             final HttpServletRequest request){
+    HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+    StandardError error = new StandardError(
+            formatter.format(System.currentTimeMillis()),
+            status.value(),
+            "Tipo de conta inválido",
             e.getMessage(),
             request.getRequestURI()
     );

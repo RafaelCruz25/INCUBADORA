@@ -3,7 +3,9 @@ package com.invillia.account.factory;
 import br.com.leonardoferreira.jbacon.JBacon;
 import com.invillia.account.entity.enums.AccountType;
 import com.invillia.account.entity.request.AccountRequest;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AccountRequestFactory  extends JBacon<AccountRequest> {
 
   private final PersonFactory personFactory;

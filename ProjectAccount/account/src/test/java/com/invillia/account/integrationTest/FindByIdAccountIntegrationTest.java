@@ -1,4 +1,4 @@
-package com.invillia.account.integration;
+package com.invillia.account.integrationTest;
 
 import com.invillia.account.factory.AccountFactory;
 import com.invillia.account.entity.Account;

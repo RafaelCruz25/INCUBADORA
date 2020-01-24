@@ -1,8 +1,7 @@
 package com.invillia.account.controller;
 
 import com.invillia.account.entity.request.AccountRequest;
-import com.invillia.account.entity.request.DepositRequest;
-import com.invillia.account.entity.request.WithdrawRequest;
+import com.invillia.account.entity.request.BankRequest;
 import com.invillia.account.entity.response.AccountResponse;
 import com.invillia.account.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +32,15 @@ public class AccountController {
     this.accountService = accountService;
   }
 
-  @PostMapping("/withdraw")
-  public ResponseEntity withdraw(@Valid @RequestBody final WithdrawRequest withdrawRequest){
-    accountService.withdraw(withdrawRequest);
+  @PostMapping("/withdraw/{id}")
+  public ResponseEntity withdraw(@PathVariable final Long id, @Valid @RequestBody final BankRequest bankRequest){
+    accountService.withdraw(id, bankRequest);
     return ResponseEntity.ok().build();
   }
 
-  @PostMapping("/deposit")
-  public ResponseEntity deposit(@Valid @RequestBody final DepositRequest depositRequest){
-    accountService.deposit(depositRequest);
+  @PostMapping("/deposit/{id}")
+  public ResponseEntity deposit(@PathVariable final Long id, @Valid @RequestBody final BankRequest bankRequest){
+    accountService.deposit(id, bankRequest);
     return ResponseEntity.ok().build();
   }
 

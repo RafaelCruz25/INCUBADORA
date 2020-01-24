@@ -11,11 +11,9 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WithdrawRequest {
+public class BankRequest {
 
   @NotNull
-  private Double withdraw;
+  private Double value;
 
-  @NotNull
-  private Long idAccount;
 }

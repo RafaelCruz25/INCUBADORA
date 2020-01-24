@@ -2,10 +2,10 @@ package com.invillia.account.service.serviceImp;
 
 import com.invillia.account.entity.Account;
 import com.invillia.account.entity.request.AccountRequest;
-import com.invillia.account.entity.request.DepositRequest;
-import com.invillia.account.entity.request.WithdrawRequest;
+import com.invillia.account.entity.request.BankRequest;
 import com.invillia.account.entity.response.AccountResponse;
 import com.invillia.account.exceptions.AccountNotFoundException;
+import com.invillia.account.exceptions.AccountTypeNotFoundException;
 import com.invillia.account.exceptions.PersonNotFoundException;
 import com.invillia.account.exceptions.UnavailableValueException;
 import com.invillia.account.exceptions.ValueMustBePositiveException;
@@ -35,43 +35,43 @@ public class AccountServiceImp implements AccountService {
   }
 
   @Transactional
-  public AccountResponse withdraw(final WithdrawRequest withdrawRequest) {
+  public AccountResponse withdraw(final Long id, final BankRequest bankRequest) {
 
-    if (withdrawRequest.getWithdraw() > 00.00) {
-      final Account account = accountRepository.findById(withdrawRequest.getIdAccount())
-              .orElseThrow(() -> new AccountNotFoundException("Conta com id" + withdrawRequest.getIdAccount() + "não encontrada"));
+    final Account account = accountRepository.findById(id)
+            .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
 
-      if (account.getAccountType().equals("CHECKINGACCOUNT")) {
-        if (account.getBalance() >= 0 && (account.getBalance() + account.getLoanLimit()) >= withdrawRequest.getWithdraw()) {
-          account.setBalance(account.getBalance() - withdrawRequest.getWithdraw());
-        } else {
-          throw new UnavailableValueException("Saldo indisponivel, favor verificar");
-        }
+  if(bankRequest.getValue() > 0) {
+    if (account.getAccountType().toString().equals("CHECKINGACCOUNT")) {
+      if (account.getBalance() >= 0 && (account.getBalance() + account.getLoanLimit()) >= bankRequest.getValue()) {
+        account.setBalance(account.getBalance() - bankRequest.getValue());
+      } else {
+        throw new UnavailableValueException("Saldo indisponivel, favor verificar");
       }
-      if (account.getAccountType().equals("SAVINGSACCOUNT")) {
-        if (account.getBalance() > 0 && (account.getBalance() >= withdrawRequest.getWithdraw())) {
-          account.setBalance(account.getBalance() - withdrawRequest.getWithdraw());
-        } else {
-          throw new UnavailableValueException("Saldo indisponivel, favor verificar");
-        }
-      }
-
-      final Account accountSaved = accountRepository.save(account);
-      return accountMapper.accountToAccountResponse(accountSaved);
-
-    } else {
-      throw new ValueMustBePositiveException("Valor sacado não deve ser negativo");
     }
+    if (account.getAccountType().toString().equals("SAVINGSACCOUNT")) {
+      if (account.getBalance() > 0 && (account.getBalance() >= bankRequest.getValue())) {
+        account.setBalance(account.getBalance() - bankRequest.getValue());
+      } else {
+        throw new UnavailableValueException("Saldo indisponivel, favor verificar");
+      }
+    }
+  }else{
+      throw new ValueMustBePositiveException("Valor sacado não deve ser negativo!");
+    }
+
+    final Account accountSave = accountRepository.save(account);
+    return accountMapper.accountToAccountResponse(accountSave);
   }
 
+
   @Transactional
-  public AccountResponse deposit(final DepositRequest depositRequest) {
+  public AccountResponse deposit(final Long id, final BankRequest bankRequest) {
 
-    if(depositRequest.getDeposit() > 00.00){
-      final Account account = accountRepository.findById(depositRequest.getIdAccount())
-              .orElseThrow(() -> new AccountNotFoundException("Conta com id "+ depositRequest.getIdAccount() +" não encontrada!"));
+    if(bankRequest.getValue() > 00.00){
+      final Account account = accountRepository.findById(id)
+              .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
 
-      account.setBalance(account.getBalance() + depositRequest.getDeposit());
+      account.setBalance(account.getBalance() + bankRequest.getValue());
 
       final Account accountSaved = accountRepository.save(account);
 
@@ -100,6 +100,10 @@ public class AccountServiceImp implements AccountService {
   public void update(final Long id, final AccountRequest accountRequest) {
     final Account account = accountRepository.findById(id)
             .orElseThrow(() -> new AccountNotFoundException("Conta com id " + id + " não encontrada!"));
+
+    if(!accountRequest.getAccountType().equals("CHECKINGACCOUNT") || accountRequest.getAccountType().equals("SAVINGSACCOUNT")){
+      throw new AccountTypeNotFoundException("Tipo de conta inválida!");
+    }
 
     accountMapper.updateAccountByAccountRequest(account,accountRequest);
 

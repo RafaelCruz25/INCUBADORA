@@ -22,7 +22,7 @@ public class AccountMapper {
     return AccountResponse.builder()
             .id(account.getId())
             .balance(account.getBalance())
-            .accountType(String.valueOf(account.getAccountType()))
+            .accountType(account.getAccountType().toString())
             .numberAccount(account.getNumberAccount())
             .loanLimit(account.getLoanLimit())
             .person(account.getPerson())

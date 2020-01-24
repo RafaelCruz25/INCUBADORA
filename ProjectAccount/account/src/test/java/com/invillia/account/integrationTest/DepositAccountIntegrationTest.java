@@ -1,8 +1,8 @@
-package com.invillia.account.integration;
+package com.invillia.account.integrationTest;
 
+import com.invillia.account.entity.request.BankRequest;
 import com.invillia.account.factory.AccountFactory;
 import com.invillia.account.entity.Account;
-import com.invillia.account.entity.request.DepositRequest;
 import com.invillia.account.repository.AccountRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -31,13 +31,13 @@ public class DepositAccountIntegrationTest {
   @Test
   void depositWithIdPersonNotExistTest(){
     final Account account = accountFactory.create();
-    final DepositRequest depositRequest = new DepositRequest(500.00, 2L);
+    final BankRequest bankRequest = new BankRequest(500.00);
 
     RestAssured
             .given()
               .log().all()
               .contentType(ContentType.JSON)
-              .body(depositRequest)
+              .body(bankRequest)
             .when()
               .post("/accounts/deposit")
             .then()
@@ -49,14 +49,14 @@ public class DepositAccountIntegrationTest {
   @Test
   void depositWithSuccessTest(){
     final Account account = accountFactory.create();
-    final DepositRequest depositRequest = new DepositRequest(500.00, 1L);
-    final Double balance = depositRequest.getDeposit() + account.getBalance();
+    final BankRequest bankRequest = new BankRequest(500.00);
+    final Double balance = bankRequest.getValue() + account.getBalance();
 
     RestAssured
             .given()
               .log().all()
               .contentType(ContentType.JSON)
-              .body(depositRequest)
+              .body(bankRequest)
             .when()
               .post("/accounts/deposit")
             .then()
@@ -73,13 +73,13 @@ public class DepositAccountIntegrationTest {
   void depositAccountWithNegativeNumberTest(){
     final Account account = accountFactory.create();
 
-    final DepositRequest depositRequest = new DepositRequest(-2000.00, 1L);
+    final BankRequest bankRequest = new BankRequest(-2000.00);
 
     RestAssured
             .given()
               .log().all()
               .contentType(ContentType.JSON)
-              .body(depositRequest)
+              .body(bankRequest)
             .when()
               .post("/accounts/deposit")
             .then()

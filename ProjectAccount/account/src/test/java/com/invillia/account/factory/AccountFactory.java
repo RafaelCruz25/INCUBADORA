@@ -24,7 +24,7 @@ public class AccountFactory  extends JBacon<Account> {
     return Account
             .builder()
             .numberAccount("12345")
-            .balance(0.0)
+            .balance(1000.0)
             .loanLimit(0.0)
             .accountType(AccountType.CHECKINGACCOUNT)
             .id(1L)
