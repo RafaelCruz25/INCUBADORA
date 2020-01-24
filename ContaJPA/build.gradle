@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "org.postgresql:postgresql:42.2.8"
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.3.Final'
+}
