@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_ACCEPTABLE;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class WithdrawAccountIntegrationTest {
 
   private final AccountFactory accountFactory;
