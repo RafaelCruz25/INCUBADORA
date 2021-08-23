@@ -12,7 +12,7 @@
 </ul>
 <br />
 
-<h3>Necessário criar das datasbase:</h3>
+<h3>Necessário criar as tabelas:</h3>
     <ul>
       <li>Team</li>
       <li>Member</li>
